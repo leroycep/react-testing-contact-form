@@ -9,6 +9,7 @@ test("first name, last name, email, and message exist on the form", () => {
   const lastName = getByLabelText(/last name/i);
   const email = getByLabelText(/email/i);
   const message = getByLabelText(/message/i);
+  const submit = getByText(/submit/i);
 
   expect(firstName).toBeInTheDocument();
   expect(lastName).toBeInTheDocument();
@@ -17,7 +18,9 @@ test("first name, last name, email, and message exist on the form", () => {
 });
 
 test("simple data, no error messages", async () => {
-  const { getByLabelText, getByText, queryByText } = render(<ContactForm />);
+  const { getByLabelText, getByText, queryByText } = render(
+    <ContactForm />
+  );
 
   const data = {
     firstName: "billy",
@@ -30,15 +33,15 @@ test("simple data, no error messages", async () => {
   const lastName = getByLabelText(/last name/i);
   const email = getByLabelText(/email/i);
   const message = getByLabelText(/message/i);
+  const submit = getByText(/submit/i);
 
   fireEvent.change(firstName, { target: data.firstName });
   fireEvent.change(lastName, { target: data.lastName });
   fireEvent.change(email, { target: data.email });
   fireEvent.change(message, { target: data.message });
-
+  fireEvent.click(submit);
 
   const output = await waitForElement(() => getByText(data.firstName));
 
-  expect(queryByText(/error/i)).toBeNull();
   expect(output).toBeInTheDocument();
 });
