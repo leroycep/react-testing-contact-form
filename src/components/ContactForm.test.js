@@ -3,12 +3,12 @@ import { render } from "@testing-library/react";
 import ContactForm from "./ContactForm";
 
 test("first name, last name, email, and message exist on the form", () => {
-  const { getByText } = render(<ContactForm />);
+  const { getByText, getByLabelText } = render(<ContactForm />);
 
-  const firstName = getByText(/first name/i);
-  const lastName = getByText(/last name/i);
-  const email = getByText(/email/i);
-  const message = getByText(/message/i);
+  const firstName = getByLabelText(/first name/i);
+  const lastName = getByLabelText(/last name/i);
+  const email = getByLabelText(/email/i);
+  const message = getByLabelText(/message/i);
 
   expect(firstName).toBeInTheDocument();
   expect(lastName).toBeInTheDocument();
