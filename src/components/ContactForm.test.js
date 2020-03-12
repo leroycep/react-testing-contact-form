@@ -15,6 +15,15 @@ test("first name, last name, email, and message exist on the form", () => {
   expect(lastName).toBeInTheDocument();
   expect(email).toBeInTheDocument();
   expect(message).toBeInTheDocument();
+
+  expect(firstName).toBeVisible();
+  expect(lastName).toBeVisible();
+  expect(email).toBeVisible();
+  expect(message).toBeVisible();
+
+  expect(firstName.placeholder).toBeTruthy();
+  expect(lastName.placeholder).toBeTruthy();
+  expect(email.placeholder).toBeTruthy()
 });
 
 test("simple data, data appears below", async () => {
