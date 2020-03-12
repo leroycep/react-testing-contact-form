@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, act, fireEvent, waitForElement } from "@testing-library/react";
 import ContactForm from "./ContactForm";
 
 test("first name, last name, email, and message exist on the form", () => {
@@ -16,8 +16,8 @@ test("first name, last name, email, and message exist on the form", () => {
   expect(message).toBeInTheDocument();
 });
 
-test("simple data, no error messages", () => {
-  const { getByLabelText, fireEvent } = render(<ContactForm />);
+test("simple data, no error messages", async () => {
+  const { getByLabelText, getByText, queryByText } = render(<ContactForm />);
 
   const data = {
     firstName: "billy",
@@ -31,10 +31,14 @@ test("simple data, no error messages", () => {
   const email = getByLabelText(/email/i);
   const message = getByLabelText(/message/i);
 
-  //firstName.;
+  fireEvent.change(firstName, { target: data.firstName });
+  fireEvent.change(lastName, { target: data.lastName });
+  fireEvent.change(email, { target: data.email });
+  fireEvent.change(message, { target: data.message });
 
-  expect(firstName).toBeInTheDocument();
-  expect(lastName).toBeInTheDocument();
-  expect(email).toBeInTheDocument();
-  expect(message).toBeInTheDocument();
+
+  const output = await waitForElement(() => getByText(data.firstName));
+
+  expect(queryByText(/error/i)).toBeNull();
+  expect(output).toBeInTheDocument();
 });
