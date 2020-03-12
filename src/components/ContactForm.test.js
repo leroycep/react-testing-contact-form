@@ -17,10 +17,8 @@ test("first name, last name, email, and message exist on the form", () => {
   expect(message).toBeInTheDocument();
 });
 
-test("simple data, no error messages", async () => {
-  const { getByLabelText, getByText, queryByText } = render(
-    <ContactForm />
-  );
+test("simple data, data appears below", async () => {
+  const { getByLabelText, getByText } = render(<ContactForm />);
 
   const data = {
     firstName: "billy",
@@ -35,13 +33,15 @@ test("simple data, no error messages", async () => {
   const message = getByLabelText(/message/i);
   const submit = getByText(/submit/i);
 
-  fireEvent.change(firstName, { target: data.firstName });
-  fireEvent.change(lastName, { target: data.lastName });
-  fireEvent.change(email, { target: data.email });
-  fireEvent.change(message, { target: data.message });
+  fireEvent.change(firstName, { target: { value: data.firstName } });
+  fireEvent.change(lastName, { target: { value: data.lastName } });
+  fireEvent.change(email, { target: { value: data.email } });
+  fireEvent.change(message, { target: { value: data.message } });
+
+  // Make sure no error messages appear
   fireEvent.click(submit);
 
-  const output = await waitForElement(() => getByText(data.firstName));
-
-  expect(output).toBeInTheDocument();
+  const output = await waitForElement(() =>
+    getByText(new RegExp(data.firstName))
+  );
 });
